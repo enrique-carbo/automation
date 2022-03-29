@@ -10,10 +10,13 @@ Library           RPA.Tables
 Library           RPA.PDF
 Library           RPA.Archive
 Library           RPA.Robocorp.Vault
+Library           RPA.Dialogs 
+Library    Dialogs
 
 
 *** Tasks ***
 Order robots from RobotSpareBin Industries Inc
+    #Input form dialog 
     Download the orders csv file
     Read csv as a table and return the result
     Open the robot order website
@@ -25,9 +28,18 @@ Open the robot order website
     ${secret}=    Get Secret    websites
     Open Available Browser    ${secret}[weburl]    browser_selection=firefox
 
+#Input form dialog 
+    #Add heading    Input URL to CSV file download
+    #Add text input    url    label=Input the URL
+    #${result}=    Run dialog
+    #[Return]    ${result.url}[0]
+    
+
 Download the orders csv file
-    ${secret}=    Get Secret    websites
-    Download    ${secret}[csvfile]    overwrite=True
+    ${url}=    Get Value From User    Enter url
+    #${secret}=    Get Secret    websites
+    #Download    ${secret}[csvfile]    overwrite=True
+    Download    ${url}    overwrite=True
     
 Read csv as a table and return the result
     ${orders}=    Read table from CSV    orders.csv
